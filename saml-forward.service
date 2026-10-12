@@ -1,0 +1,13 @@
+[Unit]
+Description=Forward SAML callback ports (8096-8115, 35001) from the container interface to loopback
+After=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'sysctl -w net.ipv4.conf.all.route_localnet=1 && for i in $(ls /sys/class/net); do sysctl -w net.ipv4.conf.$i.route_localnet=1 || true; done'
+ExecStart=/usr/sbin/iptables -t nat -A PREROUTING -p tcp --dport 8096:8115 -j DNAT --to-destination 127.0.0.1
+ExecStart=/usr/sbin/iptables -t nat -A PREROUTING -p tcp --dport 35001 -j DNAT --to-destination 127.0.0.1
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Container has no browser: record the URL the AWS VPN client wants opened (SAML login).
+# Read it from the host with `./run.sh url`.
+printf '%s\n' "$*" > /run/saml-url
+chmod 666 /run/saml-url

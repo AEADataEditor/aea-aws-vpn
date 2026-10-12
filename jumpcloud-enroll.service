@@ -1,0 +1,12 @@
+[Unit]
+Description=Enroll this container in JumpCloud (run once, manually)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/run/secrets/jc_key
+ConditionPathExists=!/opt/jc/jcagent.conf
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'curl --tlsv1.2 --silent --show-error --header "x-connect-key: $(cat /run/secrets/jc_key)" https://kickstart.jumpcloud.com/Kickstart | bash'
+ExecStartPost=/bin/rm -f /run/secrets/jc_key
+RemainAfterExit=yes

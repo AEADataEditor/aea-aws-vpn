@@ -1,0 +1,14 @@
+#!/bin/sh
+# Minimal stand-in for systemd-resolved's resolvectl, used by the AWS VPN client's
+# configure-dns script. Docker owns /etc/resolv.conf (bind mount), so we rewrite it in place.
+BACKUP=/run/resolv.conf.pre-vpn
+case "$1" in
+  dns)    # resolvectl dns <dev> <server>...
+          shift 2
+          [ -e "$BACKUP" ] || cp /etc/resolv.conf "$BACKUP"
+          { for s in "$@"; do echo "nameserver $s"; done; } > /etc/resolv.conf ;;
+  revert) [ -e "$BACKUP" ] && cat "$BACKUP" > /etc/resolv.conf && rm -f "$BACKUP" ;;
+  status) cat /etc/resolv.conf ;;
+  *)      : ;;   # domain, default-route, etc.: nothing to do
+esac
+exit 0

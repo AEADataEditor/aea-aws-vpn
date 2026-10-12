@@ -1,0 +1,10 @@
+[Unit]
+Description=SOCKS5 proxy exposing the VPN to the host
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/microsocks -i 0.0.0.0 -p 1080
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
