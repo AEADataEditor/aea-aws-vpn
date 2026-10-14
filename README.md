@@ -53,7 +53,7 @@ hostnames are resolved inside the container.
 
 ```bash
 # SSH
-ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:1080 %h %p' user@host.internal
+ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:1080 %h %p' lars@bi1.orldata.org
 
 # curl
 curl --proxy socks5h://127.0.0.1:1080 http://internal-host/
